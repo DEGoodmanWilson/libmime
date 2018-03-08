@@ -18,7 +18,7 @@ class LibmimeConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["MIMEDB_FILE"] = self.deps_cpp_info["mime-db"].res_paths[0]+"/db.json"
+        cmake.definitions["MIMEDB_FILE"] = "\"{0}/db.json\"".format(self.deps_cpp_info["mime-db"].res_paths[0])
         cmake.configure()
         cmake.build()
         # cmake.test()
@@ -34,4 +34,4 @@ class LibmimeConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.defines.append("MIMEDB_FILE={0}/db.json".format(self.deps_cpp_info["mime-db"].res_paths[0]))
+        self.cpp_info.defines.append("MIMEDB_FILE=\"{0}/db.json\"".format(self.deps_cpp_info["mime-db"].res_paths[0]))

@@ -12,7 +12,7 @@ namespace mime
 #if !defined(MIMEDB_FILE)
 #error "No mime-db file provided"
 #else
-const std::string mimedb_file{MIMEDB_FILE};
+const std::string mimedb_file = MIMEDB_FILE;
 #endif
 
 std::string lookup(const std::string &str) throw(std::out_of_range);

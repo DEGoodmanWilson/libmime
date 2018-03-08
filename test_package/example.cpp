@@ -1,6 +1,8 @@
 #include <iostream>
-#include "hello.h"
+
+#define MIMEDB_FILE "hello.json"
+#include "../mime/mime.h"
 
 int main() {
-    hello();
+    std::cout << "Yay" << std::endl;
 }

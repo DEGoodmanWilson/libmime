@@ -33,3 +33,5 @@ class LibmimeConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        self.cpp_info.defines = ["MIMEDB_FILE={0}".format(self.cpp_info["mime-db"].resdirs[0])]
+        print self.cpp_info.defines

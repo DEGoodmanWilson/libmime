@@ -30,6 +30,145 @@ TEST_CASE("We can properly extract extensions from paths")
 
 SCENARIO("mime")
 {
+    GIVEN("::charset(type)")
+    {
+        THEN("it should return 'UTF-8' for 'application/json'")
+        {
+            REQUIRE(mime::charset("application/json") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for 'application/json; foo=bar'")
+        {
+            REQUIRE(mime::charset("application/json; foo=bar") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for 'application/javascript'")
+        {
+            REQUIRE(mime::charset("application/javascript") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for 'application/JavaScript'")
+        {
+            REQUIRE(mime::charset("application/JavaScript") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for 'text/html'")
+        {
+            REQUIRE(mime::charset("text/html") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for 'TEXT/HTML'")
+        {
+            REQUIRE(mime::charset("TEXT/HTML") == "UTF-8");
+        }
+
+        THEN("it should return 'UTF-8' for any text/*")
+        {
+            REQUIRE(mime::charset("text/x-bogus") == "UTF-8");
+        }
+
+        THEN("it should throw for unknown types")
+        {
+            REQUIRE_THROWS(mime::charset("application/x-bogus"));
+        }
+
+        THEN("it should throw for any application/octet-stream")
+        {
+            REQUIRE_THROWS(mime::charset("application/octet-stream"));
+        }
+    }
+
+    GIVEN("::content_type(extension)")
+    {
+        THEN("it should return content-type for 'html'")
+        {
+            REQUIRE(mime::content_type("html") == "text/html; charset=utf-8");
+        }
+
+        THEN("it should return content-type for '.html'")
+        {
+            REQUIRE(mime::content_type(".html") == "text/html; charset=utf-8");
+        }
+
+        THEN("it should return content-type for 'jade'")
+        {
+            REQUIRE(mime::content_type("jade") == "text/jade; charset=utf-8");
+        }
+
+        THEN("it should return content-type for 'json'")
+        {
+            REQUIRE(mime::content_type("json") == "application/json; charset=utf-8");
+        }
+
+        THEN("it should throw for unknown extensions")
+        {
+            REQUIRE_THROWS(mime::content_type("bogus"));
+        }
+    }
+
+    GIVEN("::content_type(type)")
+    {
+        THEN("it should attach charset to 'application/json'")
+        {
+            REQUIRE(mime::content_type("application/json") == "application/json; charset=utf-8");
+        }
+
+        THEN("it should attach charset to 'application/json; foo=bar'")
+        {
+            REQUIRE(mime::content_type("application/json; foo=bar") == "application/json; foo=bar; charset=utf-8");
+        }
+
+        THEN("it should attach charset to 'TEXT/HTML'")
+        {
+            REQUIRE(mime::content_type("TEXT/HTML") == "TEXT/HTML; charset=utf-8");
+        }
+
+        THEN("it should attach charset to 'text/html'")
+        {
+            REQUIRE(mime::content_type("text/html") == "text/html; charset=utf-8");
+        }
+
+        THEN("it should not alter 'text/html; charset=iso-8859-1'")
+        {
+            REQUIRE(mime::content_type("text/html; charset=iso-8859-1") == "text/html; charset=iso-8859-1");
+        }
+
+        THEN("it should return type for unknown types")
+        {
+            REQUIRE(mime::content_type("application/x-bogus") == "application/x-bogus");
+        }
+    }
+
+    GIVEN("::extension(type)")
+    {
+        THEN("it should return extension for mime type")
+        {
+            REQUIRE(mime::extension("text/html") == "html");
+            REQUIRE(mime::extension(" text/html") == "html");
+            REQUIRE(mime::extension("text/html ") == "html");
+        }
+
+        THEN("it should throw for unknown type")
+        {
+            REQUIRE_THROWS(mime::extension("application/x-bogus"));
+        }
+
+        THEN("it should throw for non-type string")
+        {
+            REQUIRE_THROWS(mime::extension("bogus"));
+        }
+
+        THEN("it should return extension for mime type wTHENh it parameters")
+        {
+            REQUIRE(mime::extension("text/html;charset=UTF-8") == "html");
+            REQUIRE(mime::extension("text/HTML; charset=UTF-8") == "html");
+            REQUIRE(mime::extension("text/html; charset=UTF-8") == "html");
+            REQUIRE(mime::extension("text/html; charset=UTF-8 ") == "html");
+            REQUIRE(mime::extension("text/html ; charset=UTF-8") == "html");
+        }
+    }
+
+
     GIVEN("::lookup(extension)")
     {
         THEN("it should return mime type for '.html'")

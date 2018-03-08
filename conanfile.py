@@ -18,7 +18,9 @@ class LibmimeConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        cmake.test()
+        # cmake.test()
+        self.run('ctest . --verbose')
+
 
     def package(self):
         self.copy("*.h", dst="include", src="hello")

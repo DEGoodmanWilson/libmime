@@ -26,7 +26,7 @@ CONAN_BASIC_SETUP()
 message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
 
 # TODO This feels like a hack!
-add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}\")
+add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}/db.json\")
 
 ##### mime
 
@@ -45,4 +45,4 @@ enable_testing()
 
 add_subdirectory(tests)
 
-add_test(TEMP ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_tests)
+add_test(ALL_TESTS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_tests)

@@ -58,7 +58,7 @@ if __name__ == "__main__":
     username, channel, version = get_env_vars()
     reference = "{0}/{1}".format(name, version)
     upload = "https://api.bintray.com/conan/{0}/opensource".format(username)
-    bintray = "https://api.bintray.com/conan/bintray/public-conan"
+    bincrafters = "https://api.bintray.com/conan/bincrafters/public-conan"
     vthiery = "https://api.bintray.com/conan/vthiery/conan-packages"
 
     builder = ConanMultiPackager(

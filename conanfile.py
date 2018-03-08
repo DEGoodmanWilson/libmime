@@ -8,6 +8,7 @@ class LibmimeConan(ConanFile):
     url = "<Package recipe repository url here, for issues about the package>"
     description = "<Description of Mimetypes here>"
     settings = "os", "compiler", "build_type", "arch"
+    exports_sources = ["CMakeLists.txt"]
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "cmake"
@@ -21,6 +22,8 @@ class LibmimeConan(ConanFile):
         # cmake.test()
         self.run('ctest . --verbose')
 
+    def source(self):
+        return
 
     def package(self):
         self.copy("*.h", dst="include", src="hello")

@@ -217,7 +217,7 @@ std::string content_type(const std::string &str) throw(std::out_of_range)
     }
 
     // TODO: use content-type or other module
-    if (mime.find_first_of("charset") == std::string::npos)
+    if (mime.find("charset") == std::string::npos)
     {
         auto cs{charset(mime)};
         if (!cs.empty())

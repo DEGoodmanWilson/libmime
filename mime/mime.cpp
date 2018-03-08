@@ -2,6 +2,10 @@
 // Created by Don Goodman-Wilson on 07/03/2018.
 //
 
+#if !defined(MIMEDB_FILE)
+#define MIMEDB_FILE "nope"
+#endif
+
 #include "mime.h"
 #include <unordered_map>
 #include <vector>

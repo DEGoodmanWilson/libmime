@@ -26,7 +26,7 @@ CONAN_BASIC_SETUP()
 message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
 
 # TODO This feels like a hack!
-add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}/db.json\")
+# add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}/db.json\")
 
 ##### mime
 

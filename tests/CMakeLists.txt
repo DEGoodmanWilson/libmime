@@ -1,3 +1,5 @@
+# TODO This feels like a hack!
+add_definitions(-DMIMEDB_FILE=\"${MIMEDB_FILE}\")
 
 add_executable(${PROJECT_NAME}_tests
         main.cpp

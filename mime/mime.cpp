@@ -138,12 +138,12 @@ void init_(void)
 
 std::string ext_from_filename_(std::string filename)
 {
-    if(filename.empty()) return "";
+    if (filename.empty()) return "";
 
     auto dot_pos = filename.find_last_of('.');
-    if(dot_pos == std::string::npos) return ""; // no extension on names with a . like foobar
+    if (dot_pos == std::string::npos) return ""; // no extension on names with a . like foobar
 
-    return filename.substr(dot_pos+1);
+    return filename.substr(dot_pos + 1);
 }
 
 std::string ext_from_path_(std::string path)
@@ -153,18 +153,18 @@ std::string ext_from_path_(std::string path)
     auto pos = path.find_last_of('/');
     if (pos != std::string::npos)
     {
-        filename = path.substr(pos+1);
+        filename = path.substr(pos + 1);
     }
     else
     {
         pos = path.find_last_of('\\');
         if (pos != std::string::npos)
         {
-            filename = path.substr(pos+1);
+            filename = path.substr(pos + 1);
         }
     }
     auto dot_pos = filename.find_last_of('.');
-    if(dot_pos == 0) return ""; // no extension on names with a . like foobar
+    if (dot_pos == 0) return ""; // no extension on names with a . like foobar
 
     return ext_from_filename_(filename);
 }
@@ -190,11 +190,11 @@ std::string ext_from_string_(std::string str)
 }
 }
 
-std::string lookup(const std::string &path) throw(std::out_of_range)
+std::string lookup(const std::string &str) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
-    auto extension = private_::ext_from_string_(path);
+    auto extension = private_::ext_from_string_(str);
 
     if (extension.empty())
     {
@@ -205,12 +205,29 @@ std::string lookup(const std::string &path) throw(std::out_of_range)
 }
 
 
-std::string content_type(const std::string &path) throw(std::out_of_range)
+std::string content_type(const std::string &str) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
-    return "";
+    auto mime = (str.find_first_of('/') == std::string::npos) ? lookup(str) : str;
 
+    if (mime.empty())
+    {
+        return "";
+    }
+
+    // TODO: use content-type or other module
+    if (mime.find_first_of("charset") == std::string::npos)
+    {
+        auto cs{charset(mime)};
+        if (!cs.empty())
+        {
+            std::transform(cs.begin(), cs.end(), cs.begin(), ::tolower);
+            mime += "; charset=" + cs;
+        }
+    }
+
+    return mime;
 }
 
 
@@ -218,8 +235,18 @@ std::string extension(const std::string &type) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
-    return "";
-
+    // TODO: use media-typer
+//    var match = EXTRACT_TYPE_REGEXP.exec(type)
+//
+//    // get extensions
+//    var exts = match && exports.extensions[match[1].toLowerCase()]
+//
+//    if (!exts || !exts.length) {
+//        return false
+//    }
+//
+//    return exts[0]
+    return "NOPE";
 }
 
 
@@ -227,7 +254,23 @@ std::string charset(const std::string &type) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
-    return "";
+
+//    // TODO: use media-typer
+//    var match = EXTRACT_TYPE_REGEXP.exec(type)
+//    var mime = match && db[match[1].toLowerCase()]
+//
+//    if (mime && mime.charset) {
+//        return mime.charset
+//    }
+//
+//    // default text/* to utf-8
+//    if (match && TEXT_TYPE_REGEXP.test(match[1])) {
+//        return 'UTF-8'
+//    }
+//
+//    return false
+
+    return "NOPE";
 }
 
 }

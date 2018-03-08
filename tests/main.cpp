@@ -168,7 +168,6 @@ SCENARIO("mime")
         }
     }
 
-
     GIVEN("::lookup(extension)")
     {
         THEN("it should return mime type for '.html'")

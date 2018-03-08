@@ -66,7 +66,7 @@ if __name__ == "__main__":
         channel=channel,
         reference=reference,
         upload=upload,
-        remotes=[upload, bintray, vthiery],
+        remotes=[upload, bincrafters, vthiery],
         upload_only_when_stable=True,
         stable_branch_pattern="stable/*")
 

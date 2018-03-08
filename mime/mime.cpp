@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include <fstream>
+#include <regex>
 #include <nlohmann/json.hpp>
 #include <iostream>
 
@@ -76,6 +77,10 @@ void from_json(const nlohmann::json &j, content_type_t_ &c)
 static std::unordered_map<std::string, content_type_t_> db_;
 static std::unordered_map<std::string, std::vector<std::string>> extensions_;
 static std::unordered_map<std::string, std::string> types_;
+
+static const std::regex EXTRACT_TYPE_REGEXP{R"(^\s*([^;\s]*)(?:;|\s|$))", std::regex_constants::ECMAScript};
+static const std::regex TEXT_TYPE_REGEXP{"^text", std::regex_constants::ECMAScript};
+
 
 void init_(void)
 {
@@ -209,17 +214,28 @@ std::string content_type(const std::string &str) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
-    auto mime = (str.find_first_of('/') == std::string::npos) ? lookup(str) : str;
+    std::string mime{str};
+    if (str.find('/') == std::string::npos)
+    {
+        mime = lookup(str);
+    }
 
     if (mime.empty())
     {
-        return "";
+        throw std::out_of_range{"Error TODO"};
     }
 
     // TODO: use content-type or other module
     if (mime.find("charset") == std::string::npos)
     {
-        auto cs{charset(mime)};
+        std::string cs{""};
+        try
+        {
+            cs = charset(mime);
+        }
+        catch (std::out_of_range e)
+        {}
+
         if (!cs.empty())
         {
             std::transform(cs.begin(), cs.end(), cs.begin(), ::tolower);
@@ -236,17 +252,23 @@ std::string extension(const std::string &type) throw(std::out_of_range)
     if (!mime::private_::inited_) mime::private_::init_();
 
     // TODO: use media-typer
-//    var match = EXTRACT_TYPE_REGEXP.exec(type)
-//
-//    // get extensions
-//    var exts = match && exports.extensions[match[1].toLowerCase()]
-//
-//    if (!exts || !exts.length) {
-//        return false
-//    }
-//
-//    return exts[0]
-    return "NOPE";
+    std::smatch matches;
+
+    // get extensions
+    std::vector<std::string> exts;
+    if (std::regex_search(type, matches, private_::EXTRACT_TYPE_REGEXP))
+    {
+        std::string match{matches[1].str()};
+        std::transform(match.begin(), match.end(), match.begin(), ::tolower);
+        exts = private_::extensions_.at(match);
+    }
+    if (exts.empty())
+    {
+        throw std::out_of_range("No known extensions for type " + type);
+    }
+
+    return exts[0];
+
 }
 
 
@@ -254,23 +276,36 @@ std::string charset(const std::string &type) throw(std::out_of_range)
 {
     if (!mime::private_::inited_) mime::private_::init_();
 
+    // TODO: use media-typer
+    std::smatch matches;
 
-//    // TODO: use media-typer
-//    var match = EXTRACT_TYPE_REGEXP.exec(type)
-//    var mime = match && db[match[1].toLowerCase()]
-//
-//    if (mime && mime.charset) {
-//        return mime.charset
-//    }
-//
-//    // default text/* to utf-8
-//    if (match && TEXT_TYPE_REGEXP.test(match[1])) {
-//        return 'UTF-8'
-//    }
-//
-//    return false
+    // get extensions
+    private_::content_type_t_ mime;
+    auto did_match = std::regex_search(type, matches, private_::EXTRACT_TYPE_REGEXP);
+    std::string match;
+    if (did_match)
+    {
+        match = matches[1].str();
+        std::transform(match.begin(), match.end(), match.begin(), ::tolower);
+        if (private_::db_.count(match))
+        {
+            mime = private_::db_.at(match);
+        }
+    }
 
-    return "NOPE";
+    if (!mime.charset.empty())
+    {
+        return mime.charset;
+    }
+
+    // default text/* to utf-8
+    if (did_match && std::regex_search(match, private_::TEXT_TYPE_REGEXP))
+    {
+        return "UTF-8";
+    }
+
+    throw std::out_of_range("Unknown type " + type);
+
 }
 
 }

@@ -24,7 +24,7 @@ class LibmimeConan(ConanFile):
         self.run('ctest . --verbose')
 
     def package(self):
-        self.copy("*.h", dst="include", src="mime")
+        self.copy("*.h", dst="include/mime", src="mime")
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.so", dst="lib", keep_path=False)

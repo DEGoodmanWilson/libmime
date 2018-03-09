@@ -10,7 +10,7 @@ class LibmimeConan(ConanFile):
     description = "Mimeythings"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
-    exports_sources = ["CMakeLists.txt", "mime/mime.cpp", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
+    exports_sources = ["CMakeLists.txt", "mime/mime_impl.cpp", "mime/mime_impl.h", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
     options = {"shared": [True, False]}
     default_options = "shared=False"
     requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/stable"

@@ -33,7 +33,8 @@ message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(LIB_MIME_SOURCE_FILES
-        mime/mime.cpp
+        mime/mime_impl.cpp
+        mime/mime_impl.h
         mime/mime.h
         )
 
@@ -43,6 +44,7 @@ target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 ##### tests
 enable_testing()
 
+include_directories(SYSTEM PRIVATE .)
 add_subdirectory(tests)
 
 add_test(ALL_TESTS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_tests)

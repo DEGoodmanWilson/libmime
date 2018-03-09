@@ -2,11 +2,7 @@
 // Created by Don Goodman-Wilson on 07/03/2018.
 //
 
-#if !defined(MIMEDB_FILE)
-#define MIMEDB_FILE "nope"
-#endif
-
-#include "mime.h"
+#include "mime_impl.h"
 #include <unordered_map>
 #include <vector>
 #include <fstream>
@@ -17,6 +13,8 @@
 // taken straight from https://github.com/jshttp/mime-types/blob/master/index.js
 
 namespace mime
+{
+namespace impl
 {
 
 namespace private_
@@ -32,7 +30,7 @@ struct content_type_t_
         NGINX,
         UNKNOWN,
     } source;
-    std::vector<std::string> extensions;
+    std::vector <std::string> extensions;
     bool compressible;
     std::string charset;
 
@@ -58,7 +56,7 @@ void from_json(const nlohmann::json &j, content_type_t_ &c)
 
     try
     {
-        c.extensions = j.at("extensions").get<std::vector<std::string>>();
+        c.extensions = j.at("extensions").get < std::vector < std::string >> ();
     }
     catch (const nlohmann::json::exception &e)
     {}
@@ -78,71 +76,12 @@ void from_json(const nlohmann::json &j, content_type_t_ &c)
     {}
 }
 
-static std::unordered_map<std::string, content_type_t_> db_;
-static std::unordered_map<std::string, std::vector<std::string>> extensions_;
-static std::unordered_map<std::string, std::string> types_;
+static std::unordered_map <std::string, content_type_t_> db_;
+static std::unordered_map <std::string, std::vector<std::string>> extensions_;
+static std::unordered_map <std::string, std::string> types_;
 
 static const std::regex EXTRACT_TYPE_REGEXP{R"(^\s*([^;\s]*)(?:;|\s|$))", std::regex_constants::ECMAScript};
 static const std::regex TEXT_TYPE_REGEXP{"^text", std::regex_constants::ECMAScript};
-
-
-void init_(void)
-{
-    std::ifstream infile{::mime::mimedb_file};
-    nlohmann::json db;
-    infile >> db;
-    infile.close();
-
-    //TOOD eliminate this
-
-    db_ = db.get<std::unordered_map<std::string, content_type_t_>>();
-
-
-    // source preference (least -> most)
-    std::vector<content_type_t_::source_t> preference{content_type_t_::source_t::NGINX,
-                                                      content_type_t_::source_t::APACHE,
-                                                      content_type_t_::source_t::UNKNOWN,
-                                                      content_type_t_::source_t::IANA};
-
-    for (const auto &kv : db_)
-    {
-        auto type = kv.first;
-        auto mime = kv.second;
-
-        auto exts = mime.extensions;
-
-        if (exts.empty())
-        {
-            continue;
-        }
-
-        // mime -> extensions
-        extensions_[type] = exts;
-
-        // extension -> mime
-        for (const auto &extension : exts)
-        {
-            if (types_.count(extension))
-            {
-                auto from = std::find(std::begin(preference),
-                                      std::end(preference),
-                                      db_.at(types_.at(extension)).source);
-                auto to = std::find(std::begin(preference), std::end(preference), mime.source);
-                if (types_.at(extension) != "application/octet-stream" &&
-                    (from > to || (from == to && types_.at(extension).substr(0, 12) == "application/")))
-                {
-                    // skip the remapping
-                    continue;
-                }
-            }
-
-            // set the extension -> mime
-            types_[extension] = type;
-        }
-    }
-
-    inited_ = true;
-}
 
 
 std::string ext_from_filename_(std::string filename)
@@ -199,9 +138,77 @@ std::string ext_from_string_(std::string str)
 }
 }
 
+void init(const std::string &db_name) throw(std::runtime_error)
+{
+    if (private_::inited_) return;
+
+    std::ifstream infile{db_name};
+    nlohmann::json db;
+    try
+    {
+        infile >> db;
+    }
+    catch (nlohmann::json::parse_error e)
+    {
+        infile.close();
+        throw std::runtime_error{"Invalid mime database filename provided: " + db_name};
+    }
+
+    infile.close();
+
+    //TOOD eliminate this
+    private_::db_ = db.get < std::unordered_map < std::string, private_::content_type_t_ >> ();
+
+
+    // source preference (least -> most)
+    std::vector <private_::content_type_t_::source_t> preference{private_::content_type_t_::source_t::NGINX,
+                                                             private_::content_type_t_::source_t::APACHE,
+                                                             private_::content_type_t_::source_t::UNKNOWN,
+                                                             private_::content_type_t_::source_t::IANA};
+
+    for (const auto &kv : private_::db_)
+    {
+        auto type = kv.first;
+        auto mime = kv.second;
+
+        auto exts = mime.extensions;
+
+        if (exts.empty())
+        {
+            continue;
+        }
+
+        // mime -> extensions
+        private_::extensions_[type] = exts;
+
+        // extension -> mime
+        for (const auto &extension : exts)
+        {
+            if (private_::types_.count(extension))
+            {
+                auto from = std::find(std::begin(preference),
+                                      std::end(preference),
+                                      private_::db_.at(private_::types_.at(extension)).source);
+                auto to = std::find(std::begin(preference), std::end(preference), mime.source);
+                if (private_::types_.at(extension) != "application/octet-stream" &&
+                    (from > to || (from == to && private_::types_.at(extension).substr(0, 12) == "application/")))
+                {
+                    // skip the remapping
+                    continue;
+                }
+            }
+
+            // set the extension -> mime
+            private_::types_[extension] = type;
+        }
+    }
+
+    private_::inited_ = true;
+}
+
+
 std::string lookup(const std::string &str) throw(std::out_of_range)
 {
-    if (!mime::private_::inited_) mime::private_::init_();
 
     auto extension = private_::ext_from_string_(str);
 
@@ -216,8 +223,6 @@ std::string lookup(const std::string &str) throw(std::out_of_range)
 
 std::string content_type(const std::string &str) throw(std::out_of_range)
 {
-    if (!mime::private_::inited_) mime::private_::init_();
-
     std::string mime{str};
     if (str.find('/') == std::string::npos)
     {
@@ -253,13 +258,11 @@ std::string content_type(const std::string &str) throw(std::out_of_range)
 
 std::string extension(const std::string &type) throw(std::out_of_range)
 {
-    if (!mime::private_::inited_) mime::private_::init_();
-
     // TODO: use media-typer
     std::smatch matches;
 
     // get extensions
-    std::vector<std::string> exts;
+    std::vector <std::string> exts;
     if (std::regex_search(type, matches, private_::EXTRACT_TYPE_REGEXP))
     {
         std::string match{matches[1].str()};
@@ -278,8 +281,6 @@ std::string extension(const std::string &type) throw(std::out_of_range)
 
 std::string charset(const std::string &type) throw(std::out_of_range)
 {
-    if (!mime::private_::inited_) mime::private_::init_();
-
     // TODO: use media-typer
     std::smatch matches;
 
@@ -309,7 +310,7 @@ std::string charset(const std::string &type) throw(std::out_of_range)
     }
 
     throw std::out_of_range("Unknown type " + type);
-
 }
 
+}
 }

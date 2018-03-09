@@ -15,7 +15,7 @@
 #   Copyright © 2018 D.E. Goodman-Wilson
 #
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.9)
 
 set(PROJECT_NAME mime)
 project(${PROJECT_NAME})

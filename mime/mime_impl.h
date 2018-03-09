@@ -14,6 +14,8 @@ namespace impl
 
 void init(const std::string &db_name) throw(std::runtime_error);
 
+std::string get_extension_from_path(std::string path);
+
 std::string lookup(const std::string &str) throw(std::out_of_range);
 
 std::string content_type(const std::string &str) throw(std::out_of_range);

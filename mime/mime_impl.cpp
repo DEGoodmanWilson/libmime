@@ -8,7 +8,6 @@
 #include <fstream>
 #include <regex>
 #include <nlohmann/json.hpp>
-#include <iostream>
 
 // taken straight from https://github.com/jshttp/mime-types/blob/master/index.js
 
@@ -116,26 +115,6 @@ std::string ext_from_path_(std::string path)
 
     return ext_from_filename_(filename);
 }
-
-std::string ext_from_string_(std::string str)
-{
-    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-
-    //is this a _path_, or a _filename_, or an _extension_
-
-    if (str.find('/') != std::string::npos || str.find('\\') != std::string::npos)
-    {
-        return ext_from_path_(str);
-    }
-
-    if (str.find('.') != std::string::npos)
-    {
-        return ext_from_filename_(str);
-    }
-
-    // it's just an extension, use it directly!
-    return str;
-}
 }
 
 void init(const std::string &db_name) throw(std::runtime_error)
@@ -206,11 +185,30 @@ void init(const std::string &db_name) throw(std::runtime_error)
     private_::inited_ = true;
 }
 
+std::string get_extension_from_path(std::string str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+
+    //is this a _path_, or a _filename_, or an _extension_
+
+    if (str.find('/') != std::string::npos || str.find('\\') != std::string::npos)
+    {
+        return private_::ext_from_path_(str);
+    }
+
+    if (str.find('.') != std::string::npos)
+    {
+        return private_::ext_from_filename_(str);
+    }
+
+    // it's just an extension, use it directly!
+    return str;
+}
 
 std::string lookup(const std::string &str) throw(std::out_of_range)
 {
 
-    auto extension = private_::ext_from_string_(str);
+    auto extension = get_extension_from_path(str);
 
     if (extension.empty())
     {

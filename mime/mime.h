@@ -15,6 +15,11 @@ namespace mime
 const std::string mimedb_file = MIMEDB_FILE;
 #endif
 
+std::string get_extension_from_path(std::string path)
+{
+    return impl::get_extension_from_path(path);
+}
+
 std::string lookup(const std::string &str) throw(std::out_of_range)
 {
     impl::init(mimedb_file);

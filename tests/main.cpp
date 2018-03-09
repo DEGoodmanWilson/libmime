@@ -6,31 +6,20 @@ const std::string mimedb_file = MIMEDB_FILE;
 
 #include <mime/mime.h>
 
-namespace mime
-{
-namespace impl
-{
-namespace private_
-{
-std::string ext_from_string_(std::string path);
-}
-}
-}
-
 TEST_CASE("We can properly extract extensions from paths")
 {
-    REQUIRE(mime::impl::private_::ext_from_string_("hello.gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("hello.old.gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("HELLO.GIF") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("/foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("/.foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("/foo.foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_(".gif") == "gif");
-    REQUIRE(mime::impl::private_::ext_from_string_("C:\\path\\to\\PAGE.HTML") == "html");
-    REQUIRE(mime::impl::private_::ext_from_string_("/path/to/.json") == "");
-    REQUIRE(mime::impl::private_::ext_from_string_("/path/to/.config.json") == "json");
-    REQUIRE(mime::impl::private_::ext_from_string_(".config.json") == "json");
+    REQUIRE(mime::impl::get_extension_from_path("hello.gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("hello.old.gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("HELLO.GIF") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("/foobar/hello.gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("/.foobar/hello.gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("/foo.foobar/hello.gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path(".gif") == "gif");
+    REQUIRE(mime::impl::get_extension_from_path("C:\\path\\to\\PAGE.HTML") == "html");
+    REQUIRE(mime::impl::get_extension_from_path("/path/to/.json") == "");
+    REQUIRE(mime::impl::get_extension_from_path("/path/to/.config.json") == "json");
+    REQUIRE(mime::impl::get_extension_from_path(".config.json") == "json");
 }
 
 SCENARIO("mime")

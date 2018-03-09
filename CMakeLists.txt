@@ -15,10 +15,9 @@
 #   Copyright © 2018 D.E. Goodman-Wilson
 #
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.2)
 
-set(PROJECT_NAME mime)
-project(${PROJECT_NAME})
+project(mime)
 
 ##### Use C++14
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
@@ -39,8 +38,6 @@ message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
 # add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}/db.json\")
 
 ##### mime
-
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(LIB_MIME_SOURCE_FILES
         mime/mime_impl.cpp

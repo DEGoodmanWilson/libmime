@@ -57,16 +57,16 @@ mime::lookup("folder/.htaccess"); // throws std::out_of_range
 mime::lookup("cats"); // throws std::out_of_range
 ```
 
-### mime::contentType(type)
+### mime::content_type(type)
 
 Create a full content-type header given a content-type or extension. If you need to pull the extension off of a full path, you can call `mime::get_extension_from_path()` first.
 
 ```cpp
-mime::contentType("markdown");  // "text/x-markdown; charset=utf-8"
-mime::contentType("file.json"); // "application/json; charset=utf-8"
+mime::content_type("markdown");  // "text/x-markdown; charset=utf-8"
+mime::content_type("file.json"); // "application/json; charset=utf-8"
 
 // from a full path
-mime::contentType(mime::get_extension_from_path("/path/to/file.json")); // "application/json; charset=utf-8"
+mime::content_type(mime::get_extension_from_path("/path/to/file.json")); // "application/json; charset=utf-8"
 ```
 
 ### mime::extension(type)

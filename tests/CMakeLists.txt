@@ -15,6 +15,8 @@
 #   Copyright © 2018 D.E. Goodman-Wilson
 #
 
+cmake_minimum_required(VERSION 3.2)
+
 # TODO This feels like a hack!
 add_definitions(-DMIMEDB_FILE=\"${MIMEDB_FILE}\")
 

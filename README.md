@@ -11,14 +11,14 @@ It takes a filename, and gives you a mime type :D
 	
 libmime installs with [Conan](http://docs.conan.io/en/latest/)
 
-    $ conan install libmime/[0.1.0]@DEGoodmanWilson/stable
+    $ conan install libmime/[~= 0.1]@DEGoodmanWilson/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    libmime/[0.1.0]@DEGoodmanWilson/stable
+    libmime/[~= 0.1]@DEGoodmanWilson/stable
 
     [generators]
     txt
@@ -38,7 +38,7 @@ so open a PR there if you"d like to add mime types.
 ## API
 
 ```cpp
-#include <mime/mime::h>
+#include <mime/mime.h>
 ```
 
 All functions throw `std::out_of_range` if input is invalid or not found.

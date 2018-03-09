@@ -1,8 +1,18 @@
 #
-#  mime
-#  A library for transforming filenames into mime types
+#   .__  ._____.
+#   |  | |__\_ |__
+#   |  | |  || __ \
+#   |  |_|  || \_\ \     .__
+#   |____/__||___  /____ |__| _____   ____
+#                \/     \|  |/     \_/ __ \
+#                |  Y Y  \  |  Y Y  \  ___/
+#                |__|_|  /__|__|_|  /\___  >
+#                      \/         \/     \/
 #
-#  Copyright © 2018 D.E. Goodman-Wilson
+#   libmime
+#   A C++ library for inferring MIME content-types from pathnames
+#
+#   Copyright © 2018 D.E. Goodman-Wilson
 #
 
 cmake_minimum_required(VERSION 2.8)

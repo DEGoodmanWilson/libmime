@@ -1,3 +1,20 @@
+#
+#   .__  ._____.
+#   |  | |__\_ |__
+#   |  | |  || __ \
+#   |  |_|  || \_\ \     .__
+#   |____/__||___  /____ |__| _____   ____
+#                \/     \|  |/     \_/ __ \
+#                |  Y Y  \  |  Y Y  \  ___/
+#                |__|_|  /__|__|_|  /\___  >
+#                      \/         \/     \/
+#
+#   libmime
+#   A C++ library for inferring MIME content-types from pathnames
+#
+#   Copyright © 2018 D.E. Goodman-Wilson
+#
+
 project(PackageTest CXX)
 cmake_minimum_required(VERSION 2.8.12)
 
@@ -6,9 +23,3 @@ conan_basic_setup()
 
 add_executable(example example.cpp)
 target_link_libraries(example ${CONAN_LIBS})
-
-# CTest is a testing tool that can be used to test your project.
-# enable_testing()
-# add_test(NAME example
-#          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-#          COMMAND example)

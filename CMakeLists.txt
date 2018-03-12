@@ -19,6 +19,9 @@ cmake_minimum_required(VERSION 3.2)
 
 project(mime)
 
+##### Use C++11. This is necessary to inform GCC 4.9 and other versions about language features we'll be using
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 

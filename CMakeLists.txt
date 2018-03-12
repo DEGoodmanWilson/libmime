@@ -19,9 +19,6 @@ cmake_minimum_required(VERSION 3.2)
 
 project(mime)
 
-##### Use C++14
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
@@ -33,9 +30,6 @@ CONAN_BASIC_SETUP()
 #####
 
 message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
-
-# TODO This feels like a hack!
-# add_definitions(-DMIMEDB_FILE=\"${CONAN_RES_DIRS_MIME-DB}/db.json\")
 
 ##### mime
 

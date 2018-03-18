@@ -133,7 +133,12 @@ void init(void) throw(std::runtime_error)
 {
     if (private_::inited_) return;
 
-    const std::string db_name{std::getenv("MIME_DB_FILE")};
+    const auto mime_db_file = std::getenv("MIME_DB_FILE");
+    if(!mime_db_file)
+    {
+        throw std::runtime_error{"MIME_DB_FILE not set"};
+    }
+    const std::string db_name{mime_db_file};
 
     std::ifstream infile{db_name};
     nlohmann::json db;

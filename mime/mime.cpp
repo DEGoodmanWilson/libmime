@@ -21,6 +21,7 @@
 #include <regex>
 #include <nlohmann/json.hpp>
 #include "mime.h"
+#include "db.h"
 
 // taken straight from https://github.com/jshttp/mime-types/blob/master/index.js
 
@@ -133,26 +134,7 @@ void init(void) throw(std::runtime_error)
 {
     if (private_::inited_) return;
 
-    const auto mime_db_file = std::getenv("MIME_DB_FILE");
-    if(!mime_db_file)
-    {
-        throw std::runtime_error{"MIME_DB_FILE not set"};
-    }
-    const std::string db_name{mime_db_file};
-
-    std::ifstream infile{db_name};
-    nlohmann::json db;
-    try
-    {
-        infile >> db;
-    }
-    catch (nlohmann::json::parse_error e)
-    {
-        infile.close();
-        throw std::runtime_error{"Invalid mime database filename provided: " + db_name};
-    }
-
-    infile.close();
+    nlohmann::json db = nlohmann::json::parse(db_json);
 
     //TOOD eliminate this
     private_::db_ = db.get < std::unordered_map < std::string, private_::content_type_t_ >> ();

@@ -33,9 +33,15 @@ class LibmimeConan(ConanFile):
     requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/testing"
     build_requires = "Catch/1.9.6@bincrafters/stable"
 
+    def imports(self):
+        # fetch mime db and make it into a headerfile
+        self.copy("*.json", root_package="mime-db")
+        with tools.chdir("res"):
+            self.run("xxd -i db.json > ../mime/db.h")
+
     def build(self):
+
         cmake = CMake(self)
-        cmake.definitions["MIMEDB_FILE"] = "\"{0}/db.json\"".format(self.deps_cpp_info["mime-db"].res_paths[0])
         cmake.configure()
         cmake.build()
         # cmake.test()

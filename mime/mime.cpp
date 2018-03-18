@@ -130,7 +130,7 @@ std::string ext_from_path_(std::string path)
 }
 }
 
-void init(void) throw(std::runtime_error)
+void init(void)
 {
     if (private_::inited_) return;
 
@@ -208,7 +208,7 @@ std::string get_extension_from_path(std::string str)
     return str;
 }
 
-std::string lookup(const std::string &str) throw(std::out_of_range)
+std::string lookup(const std::string &str)
 {
     init();
 
@@ -223,7 +223,7 @@ std::string lookup(const std::string &str) throw(std::out_of_range)
 }
 
 
-std::string content_type(const std::string &str) throw(std::out_of_range)
+std::string content_type(const std::string &str)
 {
     init();
 
@@ -260,7 +260,7 @@ std::string content_type(const std::string &str) throw(std::out_of_range)
 }
 
 
-std::string extension(const std::string &type) throw(std::out_of_range)
+std::string extension(const std::string &type)
 {
     init();
 
@@ -285,7 +285,7 @@ std::string extension(const std::string &type) throw(std::out_of_range)
 }
 
 
-std::string charset(const std::string &type) throw(std::out_of_range)
+std::string charset(const std::string &type)
 {
     init();
 

@@ -30,7 +30,7 @@ class LibmimeConan(ConanFile):
     exports_sources = ["CMakeLists.txt", "mime/mime.cpp", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/testing"
+    requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/stable"
     build_requires = "Catch/1.9.6@bincrafters/stable"
 
     def imports(self):

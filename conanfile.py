@@ -27,10 +27,10 @@ class LibmimeConan(ConanFile):
     description = "Mimeythings"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
-    exports_sources = ["CMakeLists.txt", "mime/mime_impl.cpp", "mime/mime_impl.h", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
+    exports_sources = ["CMakeLists.txt", "mime/mime.cpp", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/stable"
+    requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/testing"
     build_requires = "Catch/1.9.6@bincrafters/stable"
 
     def build(self):
@@ -51,4 +51,3 @@ class LibmimeConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.defines.append("MIMEDB_FILE=\"{0}/db.json\"".format(self.deps_cpp_info["mime-db"].res_paths[0]))

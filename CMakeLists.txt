@@ -39,8 +39,7 @@ message(STATUS "${PROJECT_NAME} version: " ${CONAN_PACKAGE_VERSION})
 ##### mime
 
 set(LIB_MIME_SOURCE_FILES
-        mime/mime_impl.cpp
-        mime/mime_impl.h
+        mime/mime.cpp
         mime/mime.h
         )
 

@@ -25,18 +25,18 @@ const std::string mimedb_file = MIMEDB_FILE;
 
 TEST_CASE("We can properly extract extensions from paths")
 {
-    REQUIRE(mime::impl::get_extension_from_path("hello.gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("hello.old.gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("HELLO.GIF") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("/foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("/.foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("/foo.foobar/hello.gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path(".gif") == "gif");
-    REQUIRE(mime::impl::get_extension_from_path("C:\\path\\to\\PAGE.HTML") == "html");
-    REQUIRE(mime::impl::get_extension_from_path("/path/to/.json") == "");
-    REQUIRE(mime::impl::get_extension_from_path("/path/to/.config.json") == "json");
-    REQUIRE(mime::impl::get_extension_from_path(".config.json") == "json");
+    REQUIRE(mime::get_extension_from_path("hello.gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("hello.old.gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("HELLO.GIF") == "gif");
+    REQUIRE(mime::get_extension_from_path("/foobar/hello.gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("/.foobar/hello.gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("/foo.foobar/hello.gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("gif") == "gif");
+    REQUIRE(mime::get_extension_from_path(".gif") == "gif");
+    REQUIRE(mime::get_extension_from_path("C:\\path\\to\\PAGE.HTML") == "html");
+    REQUIRE(mime::get_extension_from_path("/path/to/.json") == "");
+    REQUIRE(mime::get_extension_from_path("/path/to/.config.json") == "json");
+    REQUIRE(mime::get_extension_from_path(".config.json") == "json");
 }
 
 SCENARIO("mime")

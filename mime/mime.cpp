@@ -15,22 +15,21 @@
 //  Copyright © 2018 D.E. Goodman-Wilson
 //
 
-#include "mime_impl.h"
 #include <unordered_map>
 #include <vector>
 #include <fstream>
 #include <regex>
 #include <nlohmann/json.hpp>
+#include "mime.h"
 
 // taken straight from https://github.com/jshttp/mime-types/blob/master/index.js
 
 namespace mime
 {
-namespace impl
-{
 
 namespace private_
 {
+
 static bool inited_{false};
 
 struct content_type_t_
@@ -130,9 +129,11 @@ std::string ext_from_path_(std::string path)
 }
 }
 
-void init(const std::string &db_name) throw(std::runtime_error)
+void init(void) throw(std::runtime_error)
 {
     if (private_::inited_) return;
+
+    const std::string db_name{std::getenv("MIME_DB_FILE")};
 
     std::ifstream infile{db_name};
     nlohmann::json db;
@@ -200,6 +201,8 @@ void init(const std::string &db_name) throw(std::runtime_error)
 
 std::string get_extension_from_path(std::string str)
 {
+    init();
+
     std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 
     //is this a _path_, or a _filename_, or an _extension_
@@ -220,6 +223,7 @@ std::string get_extension_from_path(std::string str)
 
 std::string lookup(const std::string &str) throw(std::out_of_range)
 {
+    init();
 
     auto extension = get_extension_from_path(str);
 
@@ -234,6 +238,8 @@ std::string lookup(const std::string &str) throw(std::out_of_range)
 
 std::string content_type(const std::string &str) throw(std::out_of_range)
 {
+    init();
+
     std::string mime{str};
     if (str.find('/') == std::string::npos)
     {
@@ -269,6 +275,8 @@ std::string content_type(const std::string &str) throw(std::out_of_range)
 
 std::string extension(const std::string &type) throw(std::out_of_range)
 {
+    init();
+
     // TODO: use media-typer
     std::smatch matches;
 
@@ -292,6 +300,8 @@ std::string extension(const std::string &type) throw(std::out_of_range)
 
 std::string charset(const std::string &type) throw(std::out_of_range)
 {
+    init();
+
     // TODO: use media-typer
     std::smatch matches;
 
@@ -323,5 +333,4 @@ std::string charset(const std::string &type) throw(std::out_of_range)
     throw std::out_of_range("Unknown type " + type);
 }
 
-}
 }

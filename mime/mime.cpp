@@ -216,10 +216,17 @@ std::string lookup(const std::string &str)
 
     if (extension.empty())
     {
-        throw std::out_of_range{"Empty file extension"};
+        throw std::out_of_range{"mime::lookup: unknown extension"};
     };
 
-    return private_::types_.at(extension);
+    try
+    {
+        return private_::types_.at(extension);
+    }
+    catch(...)
+    {
+        throw std::out_of_range{"mime::lookup: unknown extension"};
+    }
 }
 
 
@@ -235,7 +242,7 @@ std::string content_type(const std::string &str)
 
     if (mime.empty())
     {
-        throw std::out_of_range{"Error TODO"};
+        throw std::out_of_range{"mime::content_type: invalid content-type"};
     }
 
     // TODO: use content-type or other module
@@ -246,7 +253,7 @@ std::string content_type(const std::string &str)
         {
             cs = charset(mime);
         }
-        catch (std::out_of_range e)
+        catch (const std::out_of_range &e)
         {}
 
         if (!cs.empty())
@@ -269,19 +276,17 @@ std::string extension(const std::string &type)
 
     // get extensions
     std::vector <std::string> exts;
-    if (std::regex_search(type, matches, private_::EXTRACT_TYPE_REGEXP))
+    std::regex_search(type, matches, private_::EXTRACT_TYPE_REGEXP);
+    std::string match{matches[1].str()};
+    std::transform(match.begin(), match.end(), match.begin(), ::tolower);
+    try
     {
-        std::string match{matches[1].str()};
-        std::transform(match.begin(), match.end(), match.begin(), ::tolower);
-        exts = private_::extensions_.at(match);
+        return private_::extensions_.at(match)[0];
     }
-    if (exts.empty())
+    catch(...)
     {
-        throw std::out_of_range("No known extensions for type " + type);
+        throw std::out_of_range("mime::extension: unknown extension");
     }
-
-    return exts[0];
-
 }
 
 
@@ -317,7 +322,7 @@ std::string charset(const std::string &type)
         return "UTF-8";
     }
 
-    throw std::out_of_range("Unknown type " + type);
+    throw std::out_of_range("mime::charset: unknown extension");
 }
 
 }

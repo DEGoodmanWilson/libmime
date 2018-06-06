@@ -20,7 +20,7 @@ from conans import ConanFile, CMake, tools
 
 class LibmimeConan(ConanFile):
     name = "libmime"
-    version = "0.1.0"
+    version = "0.1.1"
     generators = "cmake"
     author = "DEGoodmanWilson"
     url = "https:/github.com/{0}/conan-{1}".format(author, name)

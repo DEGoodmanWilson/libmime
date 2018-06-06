@@ -80,12 +80,12 @@ SCENARIO("mime")
 
         THEN("it should throw for unknown types")
         {
-            REQUIRE_THROWS(mime::charset("application/x-bogus"));
+            REQUIRE_THROWS_WITH(mime::charset("application/x-bogus"), "mime::charset: unknown extension");
         }
 
         THEN("it should throw for any application/octet-stream")
         {
-            REQUIRE_THROWS(mime::charset("application/octet-stream"));
+            REQUIRE_THROWS_WITH(mime::charset("application/octet-stream"), "mime::charset: unknown extension");
         }
     }
 
@@ -113,7 +113,12 @@ SCENARIO("mime")
 
         THEN("it should throw for unknown extensions")
         {
-            REQUIRE_THROWS(mime::content_type("bogus"));
+            REQUIRE_THROWS_WITH(mime::content_type("bogus"), "mime::lookup: unknown extension");
+        }
+
+        THEN("it should throw for unknown extensions")
+        {
+            REQUIRE_THROWS_WITH(mime::content_type("rb"), "mime::lookup: unknown extension");
         }
     }
 
@@ -161,12 +166,12 @@ SCENARIO("mime")
 
         THEN("it should throw for unknown type")
         {
-            REQUIRE_THROWS(mime::extension("application/x-bogus"));
+            REQUIRE_THROWS_WITH(mime::extension("application/x-bogus"), "mime::extension: unknown extension");
         }
 
         THEN("it should throw for non-type string")
         {
-            REQUIRE_THROWS(mime::extension("bogus"));
+            REQUIRE_THROWS_WITH(mime::extension("bogus"), "mime::extension: unknown extension");
         }
 
         THEN("it should return extension for mime type wTHENh it parameters")
@@ -225,8 +230,8 @@ SCENARIO("mime")
 
         THEN("it should throw an exception for unknown extension")
         {
-            REQUIRE_THROWS(mime::lookup(".bogus"));
-            REQUIRE_THROWS(mime::lookup("bogus"));
+            REQUIRE_THROWS_WITH(mime::lookup(".bogus"), "mime::lookup: unknown extension");
+            REQUIRE_THROWS_WITH(mime::lookup("bogus"), "mime::lookup: unknown extension");
         }
     }
 
@@ -257,19 +262,19 @@ SCENARIO("mime")
 
         THEN("it should throw for unknown extension")
         {
-            REQUIRE_THROWS(mime::lookup("/path/to/file.bogus"));
+            REQUIRE_THROWS_WITH(mime::lookup("/path/to/file.bogus"), "mime::lookup: unknown extension");
         }
 
         THEN("it should throw for path without extension")
         {
-            REQUIRE_THROWS(mime::lookup("/path/to/json"));
+            REQUIRE_THROWS_WITH(mime::lookup("/path/to/json"), "mime::lookup: unknown extension");
         }
 
         GIVEN("path with dotfile")
         {
             THEN("it should throw when extension-less")
             {
-                REQUIRE_THROWS(mime::lookup("/path/to/.json"));
+                REQUIRE_THROWS_WITH(mime::lookup("/path/to/.json"), "mime::lookup: unknown extension");
             }
 
             THEN("it should return mime type when there is extension")

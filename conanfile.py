@@ -20,7 +20,7 @@ from conans import ConanFile, CMake, tools
 
 class LibmimeConan(ConanFile):
     name = "libmime"
-    version = "0.1.1"
+    version = "0.1.2"
     generators = "cmake"
     author = "DEGoodmanWilson"
     url = "https:/github.com/{0}/conan-{1}".format(author, name)
@@ -30,7 +30,7 @@ class LibmimeConan(ConanFile):
     exports_sources = ["CMakeLists.txt", "mime/mime.cpp", "mime/mime.h", "tests/CMakeLists.txt", "tests/main.cpp"]
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "jsonformoderncpp/[~= 3.1]@vthiery/stable", "mime-db/[~= 1.33]@DEGoodmanWilson/stable"
+    requires = "jsonformoderncpp/[~= 3.6]@vthiery/stable", "mime-db/[~= 1.40]@DEGoodmanWilson/stable"
     build_requires = "Catch/1.9.6@bincrafters/stable"
 
     def imports(self):
